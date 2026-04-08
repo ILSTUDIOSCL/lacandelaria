@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Candelaria Pizzería – Carta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --crimson: #8B0000;
+    --crimson-deep: #6B0000;
+    --gold: #FFD700;
+    --gold-warm: #FFC200;
+    --white: #FFFFFF;
+    --black: #1A1A1A;
+    --gray: #555555;
+    --card-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    --card-hover: 0 10px 36px rgba(0,0,0,0.28);
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--crimson);
+    background-image:
+      radial-gradient(ellipse at 20% 10%, rgba(255,120,0,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 90%, rgba(0,0,0,0.3) 0%, transparent 50%);
+    color: var(--black);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(180deg, #4a0000 0%, var(--crimson-deep) 100%);
+    padding: 40px 20px 28px;
+    text-align: center;
+    position: relative;
+    border-bottom: 3px solid rgba(255,215,0,0.35);
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: 50%;
+    transform: translateX(-50%);
+    width: 320px; height: 320px;
+    background: radial-gradient(circle, rgba(255,200,0,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .logo-wrap { margin-bottom: 16px; }
+  .logo-wrap img {
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    border: 3px solid var(--gold);
+    object-fit: cover;
+    box-shadow: 0 0 30px rgba(255,215,0,0.3);
+  }
+  .logo-placeholder {
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    border: 3px solid var(--gold);
+    background: rgba(255,215,0,0.1);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto;
+    box-shadow: 0 0 30px rgba(255,215,0,0.3);
+    overflow: hidden;
+  }
+  .logo-placeholder img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 7vw, 40px);
+    color: var(--white);
+    letter-spacing: 1px;
+    line-height: 1.1;
+  }
+  header h1 span {
+    color: var(--gold);
+    display: block;
+    font-size: clamp(13px, 3.5vw, 18px);
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-top: 5px;
+  }
+  header p.tagline {
+    color: rgba(255,255,255,0.55);
+    font-size: 12px;
+    margin-top: 8px;
+    letter-spacing: 1px;
+  }
+
+  /* ── NAV ── */
+  .nav-scroll {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--crimson-deep);
+    border-bottom: 2px solid rgba(255,215,0,0.2);
+    padding: 10px 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .nav-scroll::-webkit-scrollbar { display: none; }
+  .nav-inner {
+    display: flex; gap: 8px;
+    padding: 0 16px;
+    white-space: nowrap;
+    min-width: max-content;
+  }
+  .nav-pill {
+    background: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.85);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 50px;
+    padding: 7px 15px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .nav-pill:hover, .nav-pill.active {
+    background: var(--gold);
+    color: var(--crimson-deep);
+    border-color: var(--gold);
+    font-weight: 700;
+  }
+
+  /* ── MAIN ── */
+  main { padding: 0 13px 110px; }
+
+  /* ── SECTION ── */
+  .section {
+    margin-top: 32px;
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .section.visible { opacity: 1; transform: translateY(0); }
+
+  .section-header {
+    display: flex; align-items: center; gap: 11px;
+    margin-bottom: 14px;
+    padding: 0 3px;
+  }
+  .section-icon {
+    width: 40px; height: 40px;
+    background: rgba(255,215,0,0.13);
+    border: 1.5px solid rgba(255,215,0,0.4);
+    border-radius: 11px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  .section-icon img {
+    width: 26px; height: 26px;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(20px, 5vw, 26px);
+    color: var(--white);
+    line-height: 1.1;
+  }
+  .section-divider {
+    width: 100%; height: 1px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+    margin-bottom: 14px;
+    opacity: 0.45;
+  }
+
+  /* ── GRID ── */
+  .products-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--white);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--card-hover);
+  }
+  .card:active { transform: scale(0.97); }
+
+  /* ── CARD IMAGE ── */
+  .card-img-wrap {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: #f0e8dc;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .card-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.35s ease;
+  }
+  .card:hover .card-img-wrap img { transform: scale(1.06); }
+
+  /* skeleton loader */
+  .card-img-wrap::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(110deg, #f0e8dc 30%, #e8d9c4 50%, #f0e8dc 70%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+    z-index: 0;
+  }
+  .card-img-wrap img { position: relative; z-index: 1; }
+
+  @keyframes shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* ── CARD BODY ── */
+  .card-body {
+    padding: 10px 11px 13px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .card-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(13px, 3.2vw, 15px);
+    color: var(--black);
+    line-height: 1.25;
+  }
+  .card-desc {
+    font-size: 10.5px;
+    color: var(--gray);
+    line-height: 1.45;
+    flex: 1;
+  }
+  .card-price {
+    font-size: clamp(13px, 3.5vw, 16px);
+    font-weight: 700;
+    color: #7a0000;
+    background: linear-gradient(135deg, #fff6cc, #ffe040);
+    padding: 4px 11px;
+    border-radius: 50px;
+    display: inline-block;
+    border: 1.5px solid var(--gold-warm);
+    letter-spacing: 0.2px;
+    align-self: flex-start;
+    margin-top: 2px;
+  }
+
+  /* ── AGREGADOS ── */
+  .agregados-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .agr-item {
+    background: var(--white);
+    border-radius: var(--radius-sm);
+    padding: 9px 11px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    box-shadow: var(--card-shadow);
+    transition: transform 0.15s;
+  }
+  .agr-item:hover { transform: scale(1.02); }
+  .agr-name { font-size: 12px; font-weight: 500; color: var(--black); }
+  .agr-price {
+    font-size: 11.5px; font-weight: 700;
+    color: #7a0000;
+    background: #fff3cc;
+    padding: 2px 8px;
+    border-radius: 50px;
+    border: 1px solid var(--gold-warm);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* ── BEBESTIBLES ── */
+  .beb-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 15px;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 10px;
+  }
+  .beb-header {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1.5px solid #f0e0c0;
+  }
+  .beb-header img {
+    width: 38px; height: 38px;
+    border-radius: 8px;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+  .beb-category {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    color: var(--crimson);
+  }
+  .beb-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 7px 0;
+    border-bottom: 1px solid #f5f5f5;
+    font-size: 12.5px;
+  }
+  .beb-item:last-child { border-bottom: none; }
+  .beb-item-name { color: var(--black); font-weight: 500; }
+  .beb-item-price {
+    color: #7a0000; font-weight: 700;
+    background: #fff3cc;
+    padding: 2px 9px;
+    border-radius: 50px;
+    font-size: 11.5px;
+    border: 1px solid var(--gold-warm);
+  }
+
+  /* ── WHATSAPP ── */
+  .wa-btn {
+    position: fixed;
+    bottom: 22px; right: 16px;
+    width: 58px; height: 58px;
+    background: #25D366;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 20px rgba(37,211,102,0.5);
+    text-decoration: none;
+    z-index: 999;
+    transition: transform 0.2s, box-shadow 0.2s;
+    animation: waPulse 2.5s infinite;
+  }
+  .wa-btn:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(37,211,102,0.75); }
+  .wa-btn svg { width: 30px; height: 30px; fill: white; }
+  @keyframes waPulse {
+    0%,100% { box-shadow: 0 4px 20px rgba(37,211,102,0.5); }
+    50%      { box-shadow: 0 4px 28px rgba(37,211,102,0.85), 0 0 0 8px rgba(37,211,102,0.1); }
+  }
+
+  footer {
+    text-align: center;
+    padding: 18px;
+    color: rgba(255,255,255,0.38);
+    font-size: 11.5px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    margin-top: 16px;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 360px) {
+    .products-grid { grid-template-columns: 1fr; }
+    .agregados-grid { grid-template-columns: 1fr; }
+  }
+  @media (min-width: 600px) {
+    .products-grid { grid-template-columns: repeat(3, 1fr); }
+    .agregados-grid { grid-template-columns: repeat(3, 1fr); }
+    main { max-width: 700px; margin: 0 auto; padding: 0 20px 120px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo-wrap">
+    <div class="logo-placeholder">
+      <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=200&h=200&fit=crop&crop=center&auto=format" alt="La Candelaria Pizzería" onerror="this.style.display='none'">
+    </div>
+  </div>
+  <h1>La Candelaria<span>Pizzería</span></h1>
+  <p class="tagline">Pizza auténtica estilo Nápoles · Desde el corazón</p>
+</header>
+
+<!-- NAV -->
+<nav class="nav-scroll">
+  <div class="nav-inner">
+    <a href="#entradas"    class="nav-pill">Entradas</a>
+    <a href="#pizzas"      class="nav-pill">Pizzas</a>
+    <a href="#sandwich"    class="nav-pill">Sándwich</a>
+    <a href="#agregados"   class="nav-pill">Agregados</a>
+    <a href="#postres"     class="nav-pill">Postres</a>
+    <a href="#bebestibles" class="nav-pill">Bebidas</a>
+  </div>
+</nav>
+
+<main>
+
+<!-- ═══════════════════════════ ENTRADAS ═══════════════════════════ -->
+<section class="section" id="entradas">
+  <div class="section-header">
+    <div class="section-icon">
+      <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=52&h=52&fit=crop&auto=format" alt="">
+    </div>
+    <h2 class="section-title">Entradas</h2>
+  </div>
+  <div class="section-divider"></div>
+  <div class="products-grid">
+
+    <div class="card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=400&h=300&fit=crop&auto=format" alt="Insalata di Bufala" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-name">Insalata di Bufala</div>
+        <div class="card-desc">Rúcula, jamón serrano, queso bufala, tomate cherry, pesto y parmesano.</div>
+        <div class="card-price">$15.990</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=300&fit=crop&auto=format" alt="Tabla Fría" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-name">Tabla Fría</div>
+        <div class="card-desc">Aceitunas sevillanas, nueces, higo, grisines, salamines, mozzarella y pomodoro.</div>
+        <div class="card-price">$12.990</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=400&h=300&fit=crop&auto=format" alt="Provoleta" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-name">Provoleta</div>
+        <div class="card-desc">Queso provoleta con pimentón asado, tortilla crujiente y salsa pomodoro.</div>
+        <div class="card-price">$11.990</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1573140247632-f8fd74997d5c?w=400&h=300&fit=crop&auto=format" alt="Palitos de Ajo" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-name">Palitos de Ajo & Parmesano</div>
+        <div class="card-desc">Bastones con parmesano y salsa de ajo, acompañado de pomodoro.</div>
+        <div class="card-price">$7.990</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1576107232684-1279f390859f?w=400&h=300&fit=crop&auto=format" alt="Papas Fritas" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-name">Papas Fritas</div>
+        <div class="card-desc">Papas fritas doradas y crujientes para acompañar tu pedido.</div>
+        <div class="card-price">$5.500</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════ PIZZAS ═══════════════════════════ -->
+<section class="section" id="pizzas">
+  <div class="section-header">
+    <div class="section-icon">
+      <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=52&h=52&fit=crop&auto=format" alt="">
+    </div>
+    <h2 class="section-title">Pizzas Estilo Nápoles</h2>
+  </div>
+  <div class="section-divider"></div>
+  <div class="products-grid">
+
+    <div class="card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&h=300&fit=crop&auto=format" alt="Napolitana" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-name">Napolitana</div>
+        <div class="card-desc">Pomodoro, mozzarella, tomate fresco, anchoas y aceitunas.</div>
+        <div class="card-price">$12.000</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400&h=300&fit=crop&auto=format" alt="Pepperoni" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-name">Pepperoni</div>
+        <div class="card-desc">Salsa pomodoro, mozzarella y generosas rodajas de pepperoni italiano.</div>
+        <div class="card-price">$12.000</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?w=400&h=300&fit=crop&auto=format" alt="Robusta" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-name">Robusta</div>
+        <div class="card-desc">Pomodoro, mozzarella, carne molida sazonada, cebolla y pimentón.</div>
+        <div class="card-price">$12.000</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&h=300&fit=crop&auto=format" alt="Quattro Formaggi" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-name">Quattro Formaggi</div>
+        <div class="card-desc">Mozzarella, gorgonzola, parmesano y queso de cabra. Para los amantes del queso.</div>
+        <div class="card-price">$12.500</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1571997478779-2adcbbe9ab2f?w=400&h=300&fit=crop&auto=format" alt="Acciughe e Olive" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-name">Acciughe e Olive</div>
+        <div class="card-desc">Pomodoro, mozzarella, anchoas en salmuera y aceitunas mixtas.</div>
+        <div class="card-price">$14.500</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&h=300&fit=crop&auto=format" alt="Tejana" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-name">Tejana</div>
+        <div class="card-desc">Pomodoro, mozzarella, pollo BBQ, cebolla morada y jalapeños.</div>
+        <div class="card-price">$13.000</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1548369937-47519962c11a?w=400&h=300&fit=crop&auto=format" alt="Bufala" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-name">Bufala</div>
+        <div class="card-desc">Pomodoro fresco, mozzarella di bufala, albahaca y aceite de oliva extra virgen.</div>
+        <div class="card-price">$13.500</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1555072956-7758afb20e8f?w=400&h=300&fit=crop&auto=format" alt="Prosciutto Serrano" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-name">Prosciutto Serrano</div>
+        <div class="card-desc">Mozzarella, jamón serrano, rúcula fresca, tomate cherry y parmesano.</div>
+        <div class="card-price">$13.500</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1590947132387-155cc02f3212?w=400&h=300&fit=crop&auto=format" alt="Gamberi e Olive" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-name">Gamberi e Olive</div>
+        <div class="card-desc">Pomodoro, mozzarella, camarones al ajillo y aceitunas verdes.</div>
+        <div class="card-price">$14.500</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?w=400&h=300&fit=crop&auto=format" alt="Margarita" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-name">Margarita</div>
+        <div class="card-desc">La reina de Nápoles. Pomodoro, fior di latte y albahaca fresca.</div>
+        <div class="card-price">$11.000</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1601924582970-9238bcb495d9?w=400&h=300&fit=crop&auto=format" alt="Campestre" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-name">Campestre</div>
+        <div class="card-desc">Pomodoro, mozzarella, champiñones, cebolla caramelizada y panceta.</div>
+        <div class="card-price">$12.500</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1544982503-9f984c14501a?w=400&h=300&fit=crop&auto=format" alt="Mortaccio" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-name">Mortaccio</div>
+        <div class="card-desc">Pomodoro, mozzarella, mortadela, ricotta y pistachos tostados.</div>
+        <div class="card-price">$12.000</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1520201163981-8cc95007dd2a?w=400&h=300&fit=crop&auto=format" alt="Capricciosa" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-name">Capricciosa</div>
+        <div class="card-desc">Pomodoro, mozzarella, jamón, champiñones, alcachofas y aceitunas.</div>
+        <div class="card-price">$12.000</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1532246420286-127bcd803104?w=400&h=300&fit=crop&auto=format" alt="Formaggio di Capra" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-name">Formaggio di Capra</div>
+        <div class="card-desc">Crema, queso de cabra, nueces caramelizadas, cebolla morada y miel.</div>
+        <div class="card-price">$14.500</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1595854341625-f33ee10dbf94?w=400&h=300&fit=crop&auto=format" alt="Pesto di Gamberetti" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-name">Pesto di Gamberetti</div>
+        <div class="card-desc">Base pesto, mozzarella, camarones salteados, tomate cherry y parmesano.</div>
+        <div class="card-price">$14.500</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1564510182881-2e68f69f1bd0?w=400&h=300&fit=crop&auto=format" alt="Veggie" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-name">Veggie</div>
+        <div class="card-desc">Pomodoro, mozzarella, zucchini, pimentón, champiñones y rúcula fresca.</div>
+        <div class="card-price">$12.000</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════ SÁNDWICH ═══════════════════════════ -->
+<section class="section" id="sandwich">
+  <div class="section-header">
+    <div class="section-icon">
+      <img src="https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=52&h=52&fit=crop&auto=format" alt="">
+    </div>
+    <h2 class="section-title">Sándwich</h2>
+  </div>
+  <div class="section-divider"></div>
+  <div class="products-grid">
+
+    <div class="card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=400&h=300&fit=crop&auto=format" alt="Nápoles" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-name">Nápoles</div>
+        <div class="card-desc">Pan artesanal con pomodoro, mozzarella e ingredientes italianos.</div>
+        <div class="card-price">$8.500</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1553909489-cd47e0907980?w=400&h=300&fit=crop&auto=format" alt="Mechada" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-name">Mechada</div>
+        <div class="card-desc">Carne mechada al jugo, palta, tomate y mayonesa en pan artesanal.</div>
+        <div class="card-price">$10.990</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=300&fit=crop&auto=format" alt="Mechada Luco" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-name">Mechada Luco</div>
+        <div class="card-desc">Carne mechada con queso derretido, tomate y mayonesa. El clásico chileno.</div>
+        <div class="card-price">$9.990</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=400&h=300&fit=crop&auto=format" alt="Costillitas BBQ" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-name">Costillitas BBQ</div>
+        <div class="card-desc">Costillitas desmechadas, salsa BBQ ahumada, cebolla morada y pepinillos.</div>
+        <div class="card-price">$9.990</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1481070414801-51fd732d7184?w=400&h=300&fit=crop&auto=format" alt="Di Capra" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-name">Di Capra</div>
+        <div class="card-desc">Queso de cabra, rúcula, nueces, miel y jamón serrano en pan tostado.</div>
+        <div class="card-price">$10.990</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1509722747041-616f39b57fbe?w=400&h=300&fit=crop&auto=format" alt="Arma tu Sándwich" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-name">Arma tu Sándwich</div>
+        <div class="card-desc">Pan artesanal base con ingredientes a tu elección. ¡Personalízalo!</div>
+        <div class="card-price">$6.500</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════ AGREGADOS ═══════════════════════════ -->
+<section class="section" id="agregados">
+  <div class="section-header">
+    <div class="section-icon">
+      <img src="https://images.unsplash.com/photo-1606923829579-0cb981a83e2e?w=52&h=52&fit=crop&auto=format" alt="">
+    </div>
+    <h2 class="section-title">Agregados</h2>
+  </div>
+  <div class="section-divider"></div>
+  <div class="agregados-grid">
+    <div class="agr-item"><span class="agr-name">Albahaca</span><span class="agr-price">$1.000</span></div>
+    <div class="agr-item"><span class="agr-name">Mozzarella</span><span class="agr-price">$3.200</span></div>
+    <div class="agr-item"><span class="agr-name">Camarón</span><span class="agr-price">$4.800</span></div>
+    <div class="agr-item"><span class="agr-name">Anchoas</span><span class="agr-price">$2.500</span></div>
+    <div class="agr-item"><span class="agr-name">Panceta</span><span class="agr-price">$2.800</span></div>
+    <div class="agr-item"><span class="agr-name">Aceitunas</span><span class="agr-price">$1.500</span></div>
+    <div class="agr-item"><span class="agr-name">Champiñones</span><span class="agr-price">$2.000</span></div>
+    <div class="agr-item"><span class="agr-name">Jalapeños</span><span class="agr-price">$1.200</span></div>
+    <div class="agr-item"><span class="agr-name">Ajo</span><span class="agr-price">$900</span></div>
+    <div class="agr-item"><span class="agr-name">Carne molida</span><span class="agr-price">$3.500</span></div>
+    <div class="agr-item"><span class="agr-name">Cebolla caramelizada</span><span class="agr-price">$1.500</span></div>
+    <div class="agr-item"><span class="agr-name">Pimentón</span><span class="agr-price">$1.200</span></div>
+    <div class="agr-item"><span class="agr-name">Huevo</span><span class="agr-price">$1.500</span></div>
+    <div class="agr-item"><span class="agr-name">Tomate cherry</span><span class="agr-price">$1.500</span></div>
+    <div class="agr-item"><span class="agr-name">Parmesano</span><span class="agr-price">$2.000</span></div>
+    <div class="agr-item"><span class="agr-name">Queso de cabra</span><span class="agr-price">$3.800</span></div>
+    <div class="agr-item"><span class="agr-name">Rúcula</span><span class="agr-price">$1.000</span></div>
+    <div class="agr-item"><span class="agr-name">Jamón serrano</span><span class="agr-price">$3.500</span></div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ POSTRES ═══════════════════════════ -->
+<section class="section" id="postres">
+  <div class="section-header">
+    <div class="section-icon">
+      <img src="https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=52&h=52&fit=crop&auto=format" alt="">
+    </div>
+    <h2 class="section-title">Postres</h2>
+  </div>
+  <div class="section-divider"></div>
+  <div class="products-grid">
+
+    <div class="card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=400&h=300&fit=crop&auto=format" alt="Tiramisú" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-name">Tiramisú</div>
+        <div class="card-desc">El postre italiano por excelencia. Mascarpone, café espresso y cacao.</div>
+        <div class="card-price">$5.500</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1501443762994-82bd5dace89a?w=400&h=300&fit=crop&auto=format" alt="Copa de Helado" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-name">Copa de Helado</div>
+        <div class="card-desc">Selección de sabores artesanales con toppings a elección.</div>
+        <div class="card-price">$4.500</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1528207776546-365bb710ee93?w=400&h=300&fit=crop&auto=format" alt="Panqueque Celestino" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-name">Panqueque Celestino</div>
+        <div class="card-desc">Rellenos de dulce de leche, flameados con Grand Marnier y helado.</div>
+        <div class="card-price">$6.500</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=400&h=300&fit=crop&auto=format" alt="Panqueque Serenense" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-name">Panqueque Serenense</div>
+        <div class="card-desc">Rellenos de manjar, nueces, papaya y crema. El sabor del norte.</div>
+        <div class="card-price">$7.500</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400&h=300&fit=crop&auto=format" alt="Café Helado" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-name">Café Helado</div>
+        <div class="card-desc">Espresso intenso sobre helado de vainilla. Refrescante y energizante.</div>
+        <div class="card-price">$5.500</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&h=300&fit=crop&auto=format" alt="Papayas al Jugo" loading="lazy">
+      </div>
+      <div class="card-body">
+        <div class="card-name">Papayas al Jugo</div>
+        <div class="card-desc">En su jugo natural. Disponibles con crema, helado o manjar.</div>
+        <div class="card-price">Desde $3.500</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════ BEBESTIBLES ═══════════════════════════ -->
+<section class="section" id="bebestibles">
+  <div class="section-header">
+    <div class="section-icon">
+      <img src="https://images.unsplash.com/photo-1544145945-f90425340c7e?w=52&h=52&fit=crop&auto=format" alt="">
+    </div>
+    <h2 class="section-title">Bebestibles</h2>
+  </div>
+  <div class="section-divider"></div>
+
+  <div class="beb-card">
+    <div class="beb-header">
+      <img src="https://images.unsplash.com/photo-1625772452859-1c03d5bf1137?w=76&h=76&fit=crop&auto=format" alt="Sin Alcohol">
+      <div class="beb-category">Sin Alcohol</div>
+    </div>
+    <div class="beb-item"><span class="beb-item-name">Bebidas en lata (Pepsi, 7Up, etc.)</span><span class="beb-item-price">$2.300</span></div>
+    <div class="beb-item"><span class="beb-item-name">Néctar (durazno, manzana, naranja)</span><span class="beb-item-price">$2.500</span></div>
+    <div class="beb-item"><span class="beb-item-name">Limonada natural</span><span class="beb-item-price">$3.500</span></div>
+    <div class="beb-item"><span class="beb-item-name">Limonada sour / menta</span><span class="beb-item-price">$4.000</span></div>
+    <div class="beb-item"><span class="beb-item-name">Agua mineral</span><span class="beb-item-price">$1.800</span></div>
+  </div>
+
+  <div class="beb-card">
+    <div class="beb-header">
+      <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=76&h=76&fit=crop&auto=format" alt="Cafés">
+      <div class="beb-category">Cafés & Infusiones</div>
+    </div>
+    <div class="beb-item"><span class="beb-item-name">Espresso / Americano</span><span class="beb-item-price">$2.000</span></div>
+    <div class="beb-item"><span class="beb-item-name">Café con leche / Cortado</span><span class="beb-item-price">$2.500</span></div>
+    <div class="beb-item"><span class="beb-item-name">Cappuccino / Latte</span><span class="beb-item-price">$3.000</span></div>
+    <div class="beb-item"><span class="beb-item-name">Té / Hierbas / Infusión</span><span class="beb-item-price">$2.000</span></div>
+  </div>
+
+  <div class="beb-card">
+    <div class="beb-header">
+      <img src="https://images.unsplash.com/photo-1535958636474-b021ee887b13?w=76&h=76&fit=crop&auto=format" alt="Cervezas">
+      <div class="beb-category">Cervezas</div>
+    </div>
+    <div class="beb-item"><span class="beb-item-name">Cerveza en lata (330 ml)</span><span class="beb-item-price">$2.800</span></div>
+    <div class="beb-item"><span class="beb-item-name">Cerveza artesanal (500 ml)</span><span class="beb-item-price">$4.500</span></div>
+    <div class="beb-item"><span class="beb-item-name">Cerveza sin alcohol</span><span class="beb-item-price">$2.800</span></div>
+  </div>
+
+  <div class="beb-card">
+    <div class="beb-header">
+      <img src="https://images.unsplash.com/photo-1551538827-9c037cb4f32a?w=76&h=76&fit=crop&auto=format" alt="Piscos">
+      <div class="beb-category">Piscos & Tragos</div>
+    </div>
+    <div class="beb-item"><span class="beb-item-name">Pisco sour</span><span class="beb-item-price">$4.500</span></div>
+    <div class="beb-item"><span class="beb-item-name">Piscola / Pisco tónica</span><span class="beb-item-price">$4.000</span></div>
+    <div class="beb-item"><span class="beb-item-name">Aperol Spritz</span><span class="beb-item-price">$5.500</span></div>
+    <div class="beb-item"><span class="beb-item-name">Negroni / Gin tónica</span><span class="beb-item-price">$5.000</span></div>
+  </div>
+
+  <div class="beb-card">
+    <div class="beb-header">
+      <img src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=76&h=76&fit=crop&auto=format" alt="Vinos">
+      <div class="beb-category">Vinos & Espumantes</div>
+    </div>
+    <div class="beb-item"><span class="beb-item-name">Vino tinto / blanco (copa)</span><span class="beb-item-price">$3.500</span></div>
+    <div class="beb-item"><span class="beb-item-name">Vino tinto / blanco (botella)</span><span class="beb-item-price">$13.000</span></div>
+    <div class="beb-item"><span class="beb-item-name">Espumante (copa)</span><span class="beb-item-price">$4.500</span></div>
+    <div class="beb-item"><span class="beb-item-name">Espumante (botella)</span><span class="beb-item-price">$18.000</span></div>
+  </div>
+
+</section>
+
+</main>
+
+<footer>
+  <p>© 2025 La Candelaria Pizzería · Todos los precios incluyen IVA</p>
+</footer>
+
+<!-- WHATSAPP -->
+<a class="wa-btn" href="https://wa.me/56912345678" target="_blank" rel="noopener" title="Pedir por WhatsApp">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.559 4.126 1.535 5.862L.057 23.571a.75.75 0 0 0 .918.943l5.84-1.527A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75c-1.928 0-3.761-.516-5.348-1.421l-.383-.227-3.974 1.039 1.053-3.878-.248-.393A9.718 9.718 0 0 1 2.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z"/>
+  </svg>
+</a>
+
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(el => { if (el.isIntersecting) el.target.classList.add('visible'); });
+  }, { threshold: 0.07 });
+  document.querySelectorAll('.section').forEach(s => observer.observe(s));
+
+  // Active nav pill
+  const pills = document.querySelectorAll('.nav-pill');
+  const navObs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        pills.forEach(p => p.classList.toggle('active', p.getAttribute('href') === '#' + id));
+        const active = document.querySelector('.nav-pill.active');
+        if (active) active.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('.section').forEach(s => navObs.observe(s));
+
+  // Tap feedback
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('pointerdown', function() {
+      this.style.transform = 'scale(0.97)';
+      setTimeout(() => { this.style.transform = ''; }, 140);
+    });
+  });
+
+  // Image error fallback — replace broken images with a warm gradient placeholder
+  document.querySelectorAll('img[loading="lazy"]').forEach(img => {
+    img.addEventListener('error', function() {
+      this.style.display = 'none';
+      if (this.parentElement && this.parentElement.classList.contains('card-img-wrap')) {
+        this.parentElement.style.background = 'linear-gradient(135deg,#c8a87e,#e8c99a)';
+      }
+    });
+  });
+</script>
+</body>
+</html>
